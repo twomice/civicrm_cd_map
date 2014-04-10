@@ -1,0 +1,5 @@
+name = CiviCRM Congressional Districts Mapping 
+description = Applies an overlay showing Congressional Districts on contact maps.
+version = 7.x-1.0
+package = CiviCRM
+core = 7.x

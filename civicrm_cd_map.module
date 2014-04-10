@@ -1,0 +1,37 @@
+<?php
+
+/**
+ * Implements hook_civicrm_config().
+ */
+function civicrm_cd_map_civicrm_config() {
+  define('CIVICRMCDMAP_ROOT_PATH', dirname(__FILE__));
+
+  // Prepend this module's civicrm directory to the include path.
+  $include_path = CIVICRMCDMAP_ROOT_PATH . '/civicrm/' . PATH_SEPARATOR . get_include_path();
+  set_include_path($include_path);
+
+  $template =& CRM_Core_Smarty::singleton();
+
+  // Prepend this module's templates directory to the Smarty collection.
+  $templates_dir = CIVICRMCDMAP_ROOT_PATH . '/civicrm/Smarty/templates';
+  if (is_array($template->template_dir)) {
+    array_unshift($template->template_dir, $templates_dir);
+  } else {
+    $template->template_dir = array($templates_dir, $template->template_dir);
+  }
+
+  // Prepend this module's plugins directory to the Smarty collection.
+  $pluginsDir = CIVICRMCDMAP_ROOT_PATH . '/Smarty/plugins';
+  if (is_array($template->plugins_dir)) {
+    array_unshift($template->plugins_dir, $pluginsDir);
+  } else {
+    $template->plugins_dir = array($pluginsDir, $template->plugins_dir);
+  }
+}
+
+function civicrm_cd_map_civicrm_buildForm ($form_name, &$form) {
+  if ($form_name == 'CRM_Contact_Form_Task_Map') {
+    $url = url(drupal_get_path('module', 'civicrm_cd_map') . '/civicrm_cd_map.js');
+    CRM_Core_Resources::singleton()->addScriptUrl($url);
+  }
+}
